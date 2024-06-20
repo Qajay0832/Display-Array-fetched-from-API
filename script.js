@@ -13,9 +13,9 @@ function Promise1() {
                 return res.json()
             }).then(data => {
                 if (data.posts) {
-                    tbody1.style.display="table";
-                    data.posts.forEach(ele=>{
-                        tbody1.innerHTML+=`
+                    tbody1.style.display = "table";
+                    data.posts.forEach(ele => {
+                        tbody1.innerHTML += `
                         <tr>
                         <td>${ele.userId}</td>
                         <td>${ele.title}</td>
@@ -26,25 +26,25 @@ function Promise1() {
                         <td>${ele.views}</td>
                         </tr>`
                     });
-                    resolve(data);
+                    resolve(true);
                 }
                 else {
-                    reject("error")
+                    reject(false)
                 }
             })
-        },1000)
+        }, 1000)
     })
 }
 function Promise2() {
     return new Promise((resolve, reject) => {
-        setTimeout(()=>{
+        setTimeout(() => {
             fetch("https://dummyjson.com/products").then(res => {
                 return res.json()
             }).then(data => {
-                if(data.products){
-                    tbody2.style.display="table";
-                    data.products.forEach(ele=>{
-                        tbody2.innerHTML+=`
+                if (data.products) {
+                    tbody2.style.display = "table";
+                    data.products.forEach(ele => {
+                        tbody2.innerHTML += `
                         <tr>
                         <td><div class="icon"><img src=${ele.images[0]}><p>${ele.title}</p></div></td>
                         <td>${ele.description}</td>
@@ -55,47 +55,47 @@ function Promise2() {
                         <td>${ele.warrantyInformation}</td>
                         </tr>`
                     });
-                    resolve(data);
+                    resolve(true);
                 }
-                else{
-                    reject("error is handled")
+                else {
+                    reject(false)
                 }
             })
-        },2000)
-        
+        }, 2000)
+
     })
 }
 function Promise3() {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-        fetch("https://dummyjson.com/todos").then(res => {
-            return res.json()
-        }).then(data => {
-            if(data.todos){
-                tbody3.style.display="table";
-                tbody3.style.width="100%";
-                data.todos.forEach(ele=>{
-                    let completed;
-                    if(ele.completed){
-                        completed="compelted"
-                    }else{
-                        completed="Pending"
-                    }
-                    tbody3.innerHTML+=`
+            fetch("https://dummyjson.com/todos").then(res => {
+                return res.json()
+            }).then(data => {
+                if (data.todos) {
+                    tbody3.style.display = "table";
+                    tbody3.style.width = "100%";
+                    data.todos.forEach(ele => {
+                        let completed;
+                        if (ele.completed) {
+                            completed = "compelted"
+                        } else {
+                            completed = "Pending"
+                        }
+                        tbody3.innerHTML += `
                     <tr>
                     <td>${ele.userId}</td>
                     <td>${ele.todo}</td>
                     <td>${completed}</td>
                     </tr>`
-                });
-                resolve(data);
-            
-            }
-            else{
-                reject("error")
-            }
-        })
-    }, 3000)
+                    });
+                    resolve(true);
+
+                }
+                else {
+                    reject(false)
+                }
+            })
+        }, 3000)
     })
 }
 
@@ -103,8 +103,18 @@ function Promise3() {
 
 
 function displayTable() {
-    Promise1().then(()=>Promise2()).then(()=>{
-        Promise3()
+    Promise1().then((res) => {
+        if (res) {
+            return Promise2()
+        }
+    }).then((response) => {
+        {
+            if (response) {
+                Promise3()
+            }
+        }
+    }).catch(err=>{
+        alert(err)
     })
 }
-btn.addEventListener("click",displayTable)
+btn.addEventListener("click", displayTable)
